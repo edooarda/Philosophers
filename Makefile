@@ -6,7 +6,7 @@
 #    By: edribeir <edribeir@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2024/05/17 17:02:14 by edribeir      #+#    #+#                  #
-#    Updated: 2024/05/17 17:02:18 by edribeir      ########   odam.nl          #
+#    Updated: 2024/05/22 14:25:52 by edribeir      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,24 +27,29 @@ RESET = \033[0m
 
 SOURCE = main.c \
 
-OBJECTS = $(SOURCE:%.c=%.o)
+OBJECTS = $(SOURCE:%.c=obj/%.o)
+
+OBJ_DIR = obj
 
 all: $(NAME)
+
+$(OBJ_DIR):
+	@mkdir $(OBJ_DIR)
 
 $(NAME): $(OBJECTS)
 	@cc $(CFLAGS) $(OBJECTS) -o $(NAME)
 	@echo "$(PINK)$(BOLD)\n	 R E A D Y! $(RESET)🎉\n"
 
-%.o:%.c
+obj/%.o:%.c | $(OBJ_DIR)
 	@cc $(CFLAGS) -c -o $@ $^ 
 
 clean:
-	@rm -f $(OBJECTS)
-	@echo "$(B_GREEN)$(WHITE_B) OFILES Cleansed! $(RESET) 🆗"
+	@rm -rf $(OBJ_DIR)
+	@echo "$(GREEN)$(WHITE_B) OFILES Cleansed! $(RESET) 🆗"
 
 fclean:
 	@rm -f $(NAME)
-	@rm -f $(OBJECTS)
+	@rm -rf $(OBJ_DIR)
 	@echo "$(B_GREEN)$(WHITE_B) ALL Cleansed! $(RESET)	🆗"
 
 re: fclean all
