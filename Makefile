@@ -6,11 +6,11 @@
 #    By: edribeir <edribeir@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2024/05/17 17:02:14 by edribeir      #+#    #+#                  #
-#    Updated: 2024/05/22 14:25:52 by edribeir      ########   odam.nl          #
+#    Updated: 2024/05/27 12:37:15 by eduarda       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = philosophers
+NAME = philo
 
 CFLAGS = -Wall -Werror -Wextra -g
 
@@ -26,6 +26,7 @@ BOLD = \033[1m
 RESET = \033[0m
 
 SOURCE = main.c \
+		input_checker.c \
 
 OBJECTS = $(SOURCE:%.c=obj/%.o)
 
@@ -38,7 +39,7 @@ $(OBJ_DIR):
 
 $(NAME): $(OBJECTS)
 	@cc $(CFLAGS) $(OBJECTS) -o $(NAME)
-	@echo "$(PINK)$(BOLD)\n	 R E A D Y! $(RESET)🎉\n"
+	@echo "$(PINK)$(BOLD)\n	$(NAME) is R E A D Y! $(RESET)🎉\n"
 
 obj/%.o:%.c | $(OBJ_DIR)
 	@cc $(CFLAGS) -c -o $@ $^ 
