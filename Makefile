@@ -6,13 +6,15 @@
 #    By: edribeir <edribeir@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2024/05/17 17:02:14 by edribeir      #+#    #+#                  #
-#    Updated: 2024/05/27 12:37:15 by eduarda       ########   odam.nl          #
+#    Updated: 2024/09/11 17:28:00 by eduarda       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 
 CFLAGS = -Wall -Werror -Wextra -g
+
+F_THREAD = -pthread
 
 WHITE_B = \033[1;37m
 RED = \033[31m
@@ -38,11 +40,11 @@ $(OBJ_DIR):
 	@mkdir $(OBJ_DIR)
 
 $(NAME): $(OBJECTS)
-	@cc $(CFLAGS) $(OBJECTS) -o $(NAME)
-	@echo "$(PINK)$(BOLD)\n	$(NAME) is R E A D Y! $(RESET)🎉\n"
+	@cc $(CFLAGS) $(F_THREAD) $(OBJECTS) -o $(NAME)
+	@echo "$(PINK)$(BOLD)\n	$(NAME) is READY! $(RESET)🎉\n"
 
 obj/%.o:%.c | $(OBJ_DIR)
-	@cc $(CFLAGS) -c -o $@ $^ 
+	@cc $(CFLAGS) $(F_THREAD) -c -o $@ $^ 
 
 clean:
 	@rm -rf $(OBJ_DIR)
