@@ -6,16 +6,16 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/28 10:34:01 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/05/28 10:35:19 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/09/19 17:11:19 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static long int	ft_atol(const char *str)
+static long	ft_atol(const char *str)
 {
-	int				i;
-	unsigned int	result;
+	int			i;
+	long int	result;
 
 	i = 0;
 	result = 0;
@@ -35,12 +35,12 @@ static bool	number_validation(char **argv)
 {
 	int	i;
 
-	i = 1;
-	if (ft_atol(argv[1]) < 1)
+	i = 2;
+	if (ft_atol(argv[1]) < 1 || ft_atol(argv[1]) > 200)
 		return (false);
 	while (argv[i])
 	{
-		if (ft_atol(argv[i]) < 0 || ft_atol(argv[i]) > INT_MAX)
+		if (ft_atol(argv[i]) < 1 || ft_atol(argv[i]) > INT_MAX)
 			return (false);
 		i++;
 	}
