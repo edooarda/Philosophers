@@ -6,16 +6,16 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/28 10:34:01 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/09/19 17:11:19 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/09/20 16:17:02 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static long	ft_atol(const char *str)
+int long	ft_atol(const char *str)
 {
 	int			i;
-	long int	result;
+	int long	result;
 
 	i = 0;
 	result = 0;

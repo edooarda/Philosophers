@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/17 17:00:24 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/09/11 17:17:46 by eduarda       ########   odam.nl         */
+/*   Updated: 2024/09/20 16:21:33 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <limits.h>
 # include <unistd.h>
 # include <pthread.h>
+# include <sys/time.h>
 
 # define RED "\033[31m"
 # define GREEN "\033[32m"
@@ -27,6 +28,18 @@
 # define YEL "\033[0;33m"
 # define RESET "\033[0m"
 
+typedef struct s_data_philo
+{
+	int long	start_time;
+	int			nb_philos;
+	int			limit_time_to_die;
+	int			limit_time_to_eat;
+	int			limit_time_to_sleep;
+	bool		has_meals_counter;
+	int			how_many_meals;
+}	t_data;
+
 bool	input_checker(int argc, char **argv);
+long	ft_atol(const char *str);
 
 #endif
