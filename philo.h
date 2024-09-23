@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/17 17:00:24 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/09/20 16:21:33 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/09/23 23:00:40 by eduarda       ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,9 @@ typedef struct s_data_philo
 	int			how_many_meals;
 }	t_data;
 
+
 bool	input_checker(int argc, char **argv);
 long	ft_atol(const char *str);
+int long	get_current_time(void);
 
 #endif

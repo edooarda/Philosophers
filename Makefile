@@ -6,7 +6,7 @@
 #    By: edribeir <edribeir@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2024/05/17 17:02:14 by edribeir      #+#    #+#                  #
-#    Updated: 2024/09/11 17:28:00 by eduarda       ########   odam.nl          #
+#    Updated: 2024/09/23 15:15:41 by eduarda       ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,7 @@ obj/%.o:%.c | $(OBJ_DIR)
 
 clean:
 	@rm -rf $(OBJ_DIR)
-	@echo "$(GREEN)$(WHITE_B) OFILES Cleansed! $(RESET) 🆗"
+	@echo "$(GREEN)$(WHITE_B) OFILES Cleansed! $(RESET)	🆗"
 
 fclean:
 	@rm -f $(NAME)
