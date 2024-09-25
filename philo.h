@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/17 17:00:24 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/09/24 17:28:47 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/09/25 13:51:10 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,15 @@ typedef struct s_data_philo
 	int				how_many_meals;
 	pthread_mutex_t	*cutlery;
 	t_philo			*table;
-	// pthread_mutex_t	print;
+	pthread_mutex_t	print;
+	pthread_mutex_t	meal_counter;
 }	t_data;
 
 typedef struct s_philosopher
 {
 	int					philo_id;
 	pthread_t			table_id;
-	long int			time_eat;
+	long int			last_meal;
 	int					nb_meals;
 	pthread_mutex_t		*l_hashi;
 	pthread_mutex_t		*r_hashi;

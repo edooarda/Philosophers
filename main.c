@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/17 17:00:28 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/09/24 17:28:11 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/09/25 13:41:51 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,12 @@ void	init_table(t_data *data)
 		data->table[i].nb_meals = 0;
 		data->table[i].r_hashi = &data->cutlery[i];
 		data->table[i].l_hashi = &data->cutlery[(i + 1) % data->nb_philos];
-		data->table[i].time_eat = get_current_time();
+		// if (data->table[i].philo_id == data->nb_philos)
+		// {
+		// 	data->table[i].l_hashi = data->table[i].r_hashi;
+		// 	data->table[i].r_hashi = &data->cutlery[i];
+		// }
+		data->table[i].last_meal = 0;
 		data->table[i].data = data;
 		i++;
 	}

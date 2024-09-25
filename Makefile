@@ -6,13 +6,14 @@
 #    By: edribeir <edribeir@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2024/05/17 17:02:14 by edribeir      #+#    #+#                  #
-#    Updated: 2024/09/24 16:58:17 by edribeir      ########   odam.nl          #
+#    Updated: 2024/09/25 13:28:28 by edribeir      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 
 CFLAGS = -Wall -Werror -Wextra -g
+CFLAGS += -fsanitize=thread
 
 F_THREAD = -pthread
 

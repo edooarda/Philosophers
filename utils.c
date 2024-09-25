@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/24 13:00:19 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/09/24 16:14:16 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/09/25 14:03:57 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	print_message(t_philo *philo, int flag)
 	int long	time;
 
 	time = time_stamp(philo->data);
+	pthread_mutex_lock(&philo->data->print);
 	if (flag == EAT)
 	{
 		printf(GREEN"%ld %d is eating\n"RESET, time, philo->philo_id);
@@ -43,6 +44,15 @@ void	print_message(t_philo *philo, int flag)
 	{
 		printf(CYAN"%ld %d has taken a right fork\n"RESET, time, philo->philo_id);
 	}
+	if (flag == THINK)
+	{
+		printf(PINK"%ld %d is thinking\n"RESET, time, philo->philo_id);
+	}
+	if (flag == DIED)
+	{
+		printf(RED"%ld %d has died\n"RESET, time, philo->philo_id);
+	}
+	pthread_mutex_unlock(&philo->data->print);
 }
 
 int long	get_current_time(void)
@@ -51,7 +61,10 @@ int long	get_current_time(void)
 	int long		time_milisec;
 
 	if (gettimeofday(&time, NULL) != 0)
-		return (printf("Problem Setting Time"), 0);
+	{
+		write(2, "Problem Setting Time",21);
+		return (0);
+	}
 	time_milisec = (time.tv_sec * 1000) + (time.tv_usec / 1000);
 	return (time_milisec);
 }
