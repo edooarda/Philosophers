@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/24 12:55:45 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/09/25 15:56:09 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/09/25 17:21:13 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,15 @@ void	pickup_second_hashi(t_philo *philo, pthread_mutex_t *second_hashi)
 	{
 		print_message(philo, HASHI);
 		print_message(philo, EAT);
+		pthread_mutex_lock(&philo->data->meal_counter);
+		philo->last_meal = get_current_time();
+		philo->nb_meals += 1;
+		pthread_mutex_unlock(&philo->data->meal_counter);
 		resting(philo, philo->data->limit_time_to_eat);
 		pthread_mutex_unlock(second_hashi);
 	}
+	else
+		write(2, "Error locking Hashi\n",22);
 }
 
 static bool eating(t_philo *philo)
@@ -79,14 +85,12 @@ static bool eating(t_philo *philo)
 		if(is_single_philo(philo) == true)
 			return (false);
 		pickup_second_hashi(philo, second_hashi);
-		// if (pthread_mutex_lock(second_hashi) == 0)
-		// {
-		// 	print_message(philo, HASHI);
-		// 	print_message(philo, EAT);
-		// 	resting(philo, philo->data->limit_time_to_eat);
-		// 	pthread_mutex_unlock(second_hashi);
-		// }
 		pthread_mutex_unlock(first_hashi);
+	}
+	else
+	{
+		write(2, "Error locking Hashi\n",22);
+		return (false);
 	}
 	return (true);
 }

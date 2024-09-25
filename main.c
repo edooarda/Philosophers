@@ -6,76 +6,11 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/17 17:00:28 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/09/25 13:41:51 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/09/25 16:16:34 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-void	waiting_philo(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	while (i < data->nb_philos)
-	{
-		if (pthread_join(data->table[i].table_id, NULL) != 0)
-		{
-			// free memory cutlery and philo_table
-			write(2, "ERROR join Philo thread\n", 22);
-			return ;
-		}
-		i++;
-	}
-}
-
-void	creating_philo_thread(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	while (i < data->nb_philos)
-	{
-		if (pthread_create(&data->table[i].table_id, NULL,
-				&routine, &data->table[i]) != 0)
-		{
-			// free memory cutlery and philo_table
-			write(2, "ERROR creating Philo thread\n", 22);
-			return ;
-		}
-		i++;
-	}
-}
-
-void	init_table(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	data->table = malloc(data->nb_philos * sizeof(t_philo));
-	if (data->table == NULL)
-	{
-		printf("Fail allocation memory\n");
-		return ;
-	}
-	while (i < data->nb_philos)
-	{
-		data->table[i].philo_id = i + 1;
-		data->table[i].nb_meals = 0;
-		data->table[i].r_hashi = &data->cutlery[i];
-		data->table[i].l_hashi = &data->cutlery[(i + 1) % data->nb_philos];
-		// if (data->table[i].philo_id == data->nb_philos)
-		// {
-		// 	data->table[i].l_hashi = data->table[i].r_hashi;
-		// 	data->table[i].r_hashi = &data->cutlery[i];
-		// }
-		data->table[i].last_meal = 0;
-		data->table[i].data = data;
-		i++;
-	}
-	creating_philo_thread(data);
-	waiting_philo(data);
-}
 
 void	adding_cutlery(t_data *data)
 {
@@ -90,7 +25,7 @@ void	adding_cutlery(t_data *data)
 	}
 	while (i < data->nb_philos)
 	{
-		printf("passei aqui criando hashis\n");
+		// printf("passei aqui criando hashis\n");
 		if (pthread_mutex_init(&data->cutlery[i], NULL) != 0)
 		{
 			while (i >= 0)
@@ -123,3 +58,6 @@ int	main(int argc, char **argv)
 	init_table(&data);
 	return (0);
 }
+
+// TODO free memory from mutex array and from philo array
+// destroy print mutex, meals_counter_mutex and array the mutexes

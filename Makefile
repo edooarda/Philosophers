@@ -6,7 +6,7 @@
 #    By: edribeir <edribeir@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2024/05/17 17:02:14 by edribeir      #+#    #+#                  #
-#    Updated: 2024/09/25 13:28:28 by edribeir      ########   odam.nl          #
+#    Updated: 2024/09/25 16:56:06 by edribeir      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,9 @@ RESET = \033[0m
 SOURCE = main.c \
 		input_checker.c \
 		init_data.c \
+		init_table.c \
 		routine_actions.c \
+		monitor.c \
 		utils.c \
 
 OBJECTS = $(SOURCE:%.c=obj/%.o)

@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/24 13:00:19 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/09/25 14:03:57 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/09/25 16:38:57 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	print_message(t_philo *philo, int flag)
 	int long	time;
 
 	time = time_stamp(philo->data);
-	pthread_mutex_lock(&philo->data->print);
+	pthread_mutex_lock(&philo->data->shared_lock);
 	if (flag == EAT)
 	{
 		printf(GREEN"%ld %d is eating\n"RESET, time, philo->philo_id);
@@ -52,7 +52,7 @@ void	print_message(t_philo *philo, int flag)
 	{
 		printf(RED"%ld %d has died\n"RESET, time, philo->philo_id);
 	}
-	pthread_mutex_unlock(&philo->data->print);
+	pthread_mutex_unlock(&philo->data->shared_lock);
 }
 
 int long	get_current_time(void)

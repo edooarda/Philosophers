@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/17 17:00:24 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/09/25 13:51:10 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/09/25 16:55:30 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct s_data_philo
 {
 	int long		start_time;
 	int				nb_philos;
+	int				full_belly;
 	int				limit_time_to_die;
 	int				limit_time_to_eat;
 	int				limit_time_to_sleep;
@@ -48,7 +49,7 @@ typedef struct s_data_philo
 	int				how_many_meals;
 	pthread_mutex_t	*cutlery;
 	t_philo			*table;
-	pthread_mutex_t	print;
+	pthread_mutex_t	shared_lock;
 	pthread_mutex_t	meal_counter;
 }	t_data;
 
@@ -65,6 +66,7 @@ typedef struct s_philosopher
 
 bool		input_checker(int argc, char **argv);
 t_data		init_data(int argc, char **argv);
+void		init_table(t_data *data);
 long		ft_atol(const char *str);
 int long	get_current_time(void);
 int long	time_stamp(t_data *data);
@@ -72,5 +74,6 @@ void		print_message(t_philo *philo, int flag);
 void		resting(t_philo *philo, int long must_wait);
 void		*routine(void *arg);
 void		dead(t_philo *philo);
+bool		is_belly_full(t_philo *philo);
 
 #endif
