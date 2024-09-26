@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/17 17:00:28 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/09/25 16:16:34 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/09/26 17:38:40 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,15 @@ int	main(int argc, char **argv)
 	data = init_data(argc, argv);
 	adding_cutlery(&data);
 	init_table(&data);
+	// monitor(&data);
+	waiting_philo(&data);
+	// pthread_mutex_lock(&data.shared_lock);
+	// if (data.has_meals_counter == true)
+	// {
+	// 	if (data.how_many_meals == data.full_belly)
+	// 		print_message(data.table, FULL);
+	// }
+	// pthread_mutex_unlock(&data.shared_lock);
 	return (0);
 }
 

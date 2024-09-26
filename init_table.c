@@ -6,13 +6,13 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/25 16:12:09 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/09/25 16:41:24 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/09/26 16:25:55 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void	waiting_philo(t_data *data)
+void	waiting_philo(t_data *data)
 {
 	int	i;
 
@@ -65,9 +65,10 @@ void	init_table(t_data *data)
 		data->table[i].r_hashi = &data->cutlery[i];
 		data->table[i].l_hashi = &data->cutlery[(i + 1) % data->nb_philos];
 		data->table[i].last_meal = 0;
+		data->table[i].is_alive = true;
 		data->table[i].data = data;
 		i++;
 	}
 	creating_philo_thread(data);
-	waiting_philo(data);
+	// waiting_philo(data);
 }

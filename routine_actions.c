@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/24 12:55:45 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/09/25 17:21:13 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/09/26 17:37:28 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ bool	is_single_philo(t_philo *philo)
 	if (philo->data->nb_philos == 1)
 	{
 		pthread_mutex_unlock(philo->r_hashi);
-		dead(philo);
+		resting(philo, philo->data->limit_time_to_die);
+		print_message(philo, DIED);
 		pthread_mutex_destroy(philo->r_hashi);
 		return (true);
 	}
@@ -95,26 +96,10 @@ static bool eating(t_philo *philo)
 	return (true);
 }
 
-
-static void	thinking(t_philo *philo)
-{
-	// printf(PINK"%ld %d is thinking\n"RESET,
-	// 	time_stamp(philo->data), philo->philo_id);
-	print_message(philo, THINK);
-}
-
 static void	sleeping(t_philo *philo)
 {
 	print_message(philo, SLEEPY);
 	resting(philo, philo->data->limit_time_to_sleep);
-}
-
-void	dead(t_philo *philo)
-{
-	// printf(RED"%ld %d has died\n"RESET,
-	// 	time_stamp(philo->data), philo->philo_id);
-	resting(philo, philo->data->limit_time_to_die);
-	print_message(philo, DIED);
 }
 
 void	*routine(void *arg)
@@ -124,14 +109,25 @@ void	*routine(void *arg)
 	philo = (t_philo *)arg;
 	// if ((philo->data->nb_philos % 2) == 0) // para dar ajuste nos tempos
 	// 	usleep(500);
-	// if ((philo->philo_id % 2) == 0) // para dar ajuste nos tempos
-	// 	usleep(philo->data->limit_time_to_eat);
+	if ((philo->philo_id % 2) == 0) // para dar ajuste nos tempos
+		usleep(500);
+		// resting(philo, philo->data->limit_time_to_eat);
+		// usleep(philo->data->limit_time_to_eat / 10);
 	while(1)
 	{
 		if (eating(philo) == false)
 			return (NULL);
 		sleeping(philo);
-		thinking(philo);
+		if (had_enough_meals(philo) == true)
+			return (NULL);
+		print_message(philo, THINK);
+		if (is_someone_dead(philo) == true)
+		{
+			printf("someone dead -> %d\n",philo->is_alive);
+			break ;
+		}
+		// if (had_enough_meals(philo) == true)
+		// 	return (NULL);
 	}
 	return (NULL);
 }

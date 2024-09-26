@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/24 16:57:43 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/09/25 16:51:04 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/09/26 15:06:14 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,11 @@ t_data	init_data(int argc, char **argv)
 	if (pthread_mutex_init(&data.meal_counter, NULL) != 0)
 	{
 		write(2, "Error Init mutex Meal Counter\n", 24);
+		// return ;
+	}
+	if (pthread_mutex_init(&data.private_lock, NULL) != 0)
+	{
+		write(2, "Error Init mutex Private_Lock\n", 31);
 		// return ;
 	}
 	return (data);

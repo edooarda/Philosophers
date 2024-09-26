@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/24 13:00:19 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/09/25 16:38:57 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/09/26 16:45:16 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,10 @@ void	print_message(t_philo *philo, int flag)
 	{
 		printf(RED"%ld %d has died\n"RESET, time, philo->philo_id);
 	}
+	if (flag == FULL)
+	{
+		printf(YEL"%ld all philos received enough food\n"RESET, time);
+	}
 	pthread_mutex_unlock(&philo->data->shared_lock);
 }
 
@@ -72,8 +76,8 @@ int long	get_current_time(void)
 void	resting(t_philo *philo, int long must_wait)
 {
 	int long	current_time;
-
-	printf("this is philo resting %d\n", philo->philo_id);
+	(void)philo;
+	// printf("this is philo resting %d\n", philo->philo_id);
 	current_time = get_current_time();
 	while ((get_current_time() - current_time) < must_wait)
 	{

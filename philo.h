@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/17 17:00:24 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/09/25 16:55:30 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/09/26 15:56:28 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 # define DIED 4
 # define HASHI_R 5
 # define HASHI 6
+# define FULL 7
 
 typedef struct s_philosopher	t_philo;
 
@@ -50,11 +51,13 @@ typedef struct s_data_philo
 	pthread_mutex_t	*cutlery;
 	t_philo			*table;
 	pthread_mutex_t	shared_lock;
+	pthread_mutex_t	private_lock;
 	pthread_mutex_t	meal_counter;
 }	t_data;
 
 typedef struct s_philosopher
 {
+	bool				is_alive;
 	int					philo_id;
 	pthread_t			table_id;
 	long int			last_meal;
@@ -74,6 +77,10 @@ void		print_message(t_philo *philo, int flag);
 void		resting(t_philo *philo, int long must_wait);
 void		*routine(void *arg);
 void		dead(t_philo *philo);
-bool		is_belly_full(t_philo *philo);
+bool		had_enough_meals(t_philo *philo);
+bool		is_starved(t_philo *philo);
+void		monitor(t_data *data);
+void		waiting_philo(t_data *data);
+bool		is_someone_dead(t_philo *philo);
 
 #endif
