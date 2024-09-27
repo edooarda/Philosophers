@@ -6,14 +6,14 @@
 #    By: edribeir <edribeir@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2024/05/17 17:02:14 by edribeir      #+#    #+#                  #
-#    Updated: 2024/09/26 16:59:47 by edribeir      ########   odam.nl          #
+#    Updated: 2024/09/27 17:47:45 by edribeir      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 
 CFLAGS = -Wall -Werror -Wextra -g
-# CFLAGS += -fsanitize=thread
+CFLAGS += -fsanitize=thread
 
 F_THREAD = -pthread
 
@@ -32,6 +32,7 @@ SOURCE = main.c \
 		input_checker.c \
 		init_data.c \
 		init_table.c \
+		threads.c \
 		routine_actions.c \
 		monitor.c \
 		utils.c \

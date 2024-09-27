@@ -6,62 +6,35 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/24 12:55:45 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/09/26 17:37:28 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/09/27 18:39:17 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-// static bool	eating(t_philo *philo)
-// {
-// 	if (pthread_mutex_lock(philo->r_hashi) == 0)
-// 	{
-// 		print_message(philo, HASHI_R);
-// 		if (philo->data->nb_philos == 1)
-// 		{
-// 			pthread_mutex_unlock(philo->r_hashi);
-// 			dead(philo);
-// 			pthread_mutex_destroy(philo->r_hashi);
-// 			return (false);
-// 		}
-// 		if (pthread_mutex_lock(philo->l_hashi) == 0)
-// 		{
-// 			print_message(philo, HASHI);
-// 			print_message(philo, EAT);
-// 			// pthread_mutex_lock(&philo->data->meal_counter);
-// 			// philo->last_meal = get_current_time();
-// 			// philo->nb_meals += 1;
-// 			// pthread_mutex_unlock(&philo->data->meal_counter);
-// 			resting(philo, philo->data->limit_time_to_eat);
-// 			pthread_mutex_unlock(philo->l_hashi);
-// 		}
-// 		pthread_mutex_unlock(philo->r_hashi);
-// 	}
-// 	return (true);
-// }
 bool	is_single_philo(t_philo *philo)
 {
 	if (philo->data->nb_philos == 1)
 	{
 		pthread_mutex_unlock(philo->r_hashi);
-		resting(philo, philo->data->limit_time_to_die);
-		print_message(philo, DIED);
+		resting(philo->data->limit_time_to_die);
 		pthread_mutex_destroy(philo->r_hashi);
 		return (true);
 	}
 	return (false);
 }
+
 void	pickup_second_hashi(t_philo *philo, pthread_mutex_t *second_hashi)
 {
 	if (pthread_mutex_lock(second_hashi) == 0)
 	{
 		print_message(philo, HASHI);
 		print_message(philo, EAT);
-		pthread_mutex_lock(&philo->data->meal_counter);
+		pthread_mutex_lock(philo->meal_lock);
 		philo->last_meal = get_current_time();
 		philo->nb_meals += 1;
-		pthread_mutex_unlock(&philo->data->meal_counter);
-		resting(philo, philo->data->limit_time_to_eat);
+		pthread_mutex_unlock(philo->meal_lock);
+		resting(philo->data->limit_time_to_eat);
 		pthread_mutex_unlock(second_hashi);
 	}
 	else
@@ -85,6 +58,8 @@ static bool eating(t_philo *philo)
 		print_message(philo, HASHI);
 		if(is_single_philo(philo) == true)
 			return (false);
+		if (philo->is_alive == false)
+			return (false);
 		pickup_second_hashi(philo, second_hashi);
 		pthread_mutex_unlock(first_hashi);
 	}
@@ -99,7 +74,7 @@ static bool eating(t_philo *philo)
 static void	sleeping(t_philo *philo)
 {
 	print_message(philo, SLEEPY);
-	resting(philo, philo->data->limit_time_to_sleep);
+	resting(philo->data->limit_time_to_sleep);
 }
 
 void	*routine(void *arg)
@@ -110,24 +85,26 @@ void	*routine(void *arg)
 	// if ((philo->data->nb_philos % 2) == 0) // para dar ajuste nos tempos
 	// 	usleep(500);
 	if ((philo->philo_id % 2) == 0) // para dar ajuste nos tempos
-		usleep(500);
-		// resting(philo, philo->data->limit_time_to_eat);
-		// usleep(philo->data->limit_time_to_eat / 10);
-	while(1)
+		usleep(100);
+		// resting(philo->data->limit_time_to_eat);
+		// usleep(philo->data->limit_time_to_eat / 2);
+	while (1)
 	{
-		if (eating(philo) == false)
-			return (NULL);
-		sleeping(philo);
-		if (had_enough_meals(philo) == true)
-			return (NULL);
-		print_message(philo, THINK);
-		if (is_someone_dead(philo) == true)
+		if (philo->is_alive == true)
 		{
-			printf("someone dead -> %d\n",philo->is_alive);
-			break ;
+			if (eating(philo) == false)
+				return (NULL);
+			sleeping(philo);
 		}
-		// if (had_enough_meals(philo) == true)
-		// 	return (NULL);
+		if (had_enough_meals(philo->data) == true)
+			return (NULL);
+		if (is_someone_dead(philo->data) == true)
+		{
+			printf("to morrendo por dentro\n");
+			return (NULL);
+		}
+		if (philo->is_alive == true)
+			print_message(philo, THINK);
 	}
 	return (NULL);
 }

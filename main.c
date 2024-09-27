@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/17 17:00:28 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/09/26 17:38:40 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/09/27 17:51:00 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	adding_cutlery(t_data *data)
 	}
 	while (i < data->nb_philos)
 	{
-		// printf("passei aqui criando hashis\n");
 		if (pthread_mutex_init(&data->cutlery[i], NULL) != 0)
 		{
 			while (i >= 0)
@@ -44,7 +43,8 @@ void	adding_cutlery(t_data *data)
 
 int	main(int argc, char **argv)
 {
-	t_data	data;
+	t_data		data;
+	pthread_t	watcher;
 
 	if (input_checker(argc, argv) == false)
 	{
@@ -56,15 +56,17 @@ int	main(int argc, char **argv)
 	data = init_data(argc, argv);
 	adding_cutlery(&data);
 	init_table(&data);
-	// monitor(&data);
-	waiting_philo(&data);
-	// pthread_mutex_lock(&data.shared_lock);
-	// if (data.has_meals_counter == true)
-	// {
-	// 	if (data.how_many_meals == data.full_belly)
-	// 		print_message(data.table, FULL);
-	// }
-	// pthread_mutex_unlock(&data.shared_lock);
+	supervisor(&data, &watcher);
+	creating_philo_thread(&data);
+	waiting_threads(&data, watcher);
+	// pthread_mutex_lock(&data.print_lock);
+	if (data.has_meals_counter == true)
+	{
+		printf("nb of philos: %d and full belly %d\n\n", data.nb_philos, data.full_belly);
+		if (data.full_belly >= data.nb_philos)
+			print_message(data.table, FULL);
+	}
+	// pthread_mutex_unlock(&data.print_lock);
 	return (0);
 }
 

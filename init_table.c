@@ -6,46 +6,11 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/25 16:12:09 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/09/26 16:25:55 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/09/27 17:46:23 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-void	waiting_philo(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	while (i < data->nb_philos)
-	{
-		if (pthread_join(data->table[i].table_id, NULL) != 0)
-		{
-			// free memory cutlery and philo_table
-			write(2, "ERROR join Philo thread\n", 22);
-			return ;
-		}
-		i++;
-	}
-}
-
-static void	creating_philo_thread(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	while (i < data->nb_philos)
-	{
-		if (pthread_create(&data->table[i].table_id, NULL,
-				&routine, &data->table[i]) != 0)
-		{
-			// free memory cutlery and philo_table
-			write(2, "ERROR creating Philo thread\n", 22);
-			return ;
-		}
-		i++;
-	}
-}
 
 void	init_table(t_data *data)
 {
@@ -60,15 +25,16 @@ void	init_table(t_data *data)
 	}
 	while (i < data->nb_philos)
 	{
+		data->table[i].is_alive = true;
 		data->table[i].philo_id = i + 1;
 		data->table[i].nb_meals = 0;
-		data->table[i].r_hashi = &data->cutlery[i];
+		data->table[i].last_meal = get_current_time();
 		data->table[i].l_hashi = &data->cutlery[(i + 1) % data->nb_philos];
-		data->table[i].last_meal = 0;
-		data->table[i].is_alive = true;
+		data->table[i].r_hashi = &data->cutlery[i];
+		data->table[i].print_lock = &data->print_lock;
+		data->table[i].dead_lock = &data->dead_lock;
+		data->table[i].meal_lock = &data->meal_lock;
 		data->table[i].data = data;
 		i++;
 	}
-	creating_philo_thread(data);
-	// waiting_philo(data);
 }
