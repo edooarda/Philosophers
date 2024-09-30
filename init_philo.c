@@ -1,40 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   init_table.c                                       :+:    :+:            */
+/*   init_philo.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/25 16:12:09 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/09/27 17:46:23 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/09/30 15:15:09 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	init_table(t_data *data)
+void	init_philo(t_table *table)
 {
 	int	i;
 
 	i = 0;
-	data->table = malloc(data->nb_philos * sizeof(t_philo));
-	if (data->table == NULL)
+	table->philo = malloc(table->nb_philos * sizeof(t_philo));
+	if (table->philo == NULL)
 	{
 		printf("Fail allocation memory\n");
 		return ;
 	}
-	while (i < data->nb_philos)
+	while (i < table->nb_philos)
 	{
-		data->table[i].is_alive = true;
-		data->table[i].philo_id = i + 1;
-		data->table[i].nb_meals = 0;
-		data->table[i].last_meal = get_current_time();
-		data->table[i].l_hashi = &data->cutlery[(i + 1) % data->nb_philos];
-		data->table[i].r_hashi = &data->cutlery[i];
-		data->table[i].print_lock = &data->print_lock;
-		data->table[i].dead_lock = &data->dead_lock;
-		data->table[i].meal_lock = &data->meal_lock;
-		data->table[i].data = data;
+		table->philo[i].philo_id = i + 1;
+		table->philo[i].nb_meals = 0;
+		table->philo[i].last_meal = get_current_time();
+		table->philo[i].l_hashi = &table->cutlery[(i + 1) % table->nb_philos];
+		table->philo[i].r_hashi = &table->cutlery[i];
+		table->philo[i].table = table;
 		i++;
 	}
 }

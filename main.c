@@ -6,31 +6,31 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/17 17:00:28 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/09/27 17:51:00 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/09/30 15:12:13 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	adding_cutlery(t_data *data)
+void	adding_cutlery(t_table *table)
 {
 	int	i;
 
 	i = 0;
-	data->cutlery = malloc(data->nb_philos * sizeof(pthread_mutex_t));
-	if (data->cutlery == NULL)
+	table->cutlery = malloc(table->nb_philos * sizeof(pthread_mutex_t));
+	if (table->cutlery == NULL)
 	{
 		write(2, "Error allocation memory for Cutlery\n", 37);
 		return ;
 	}
-	while (i < data->nb_philos)
+	while (i < table->nb_philos)
 	{
-		if (pthread_mutex_init(&data->cutlery[i], NULL) != 0)
+		if (pthread_mutex_init(&table->cutlery[i], NULL) != 0)
 		{
 			while (i >= 0)
 			{
-				pthread_mutex_destroy(&data->cutlery[i]);
-				free(&data->cutlery[i]);
+				pthread_mutex_destroy(&table->cutlery[i]);
+				free(&table->cutlery[i]);
 				write(2, "ERROR creating mutex, detroing previous\n", 41);
 				i--;
 			}
@@ -43,7 +43,7 @@ void	adding_cutlery(t_data *data)
 
 int	main(int argc, char **argv)
 {
-	t_data		data;
+	t_table		table;
 	pthread_t	watcher;
 
 	if (input_checker(argc, argv) == false)
@@ -53,20 +53,18 @@ int	main(int argc, char **argv)
 		printf("\n\t./philo 5 410 100 100\t OR \t./philo 5 410 100 100 10\n\n");
 		return (false);
 	}
-	data = init_data(argc, argv);
-	adding_cutlery(&data);
-	init_table(&data);
-	supervisor(&data, &watcher);
-	creating_philo_thread(&data);
-	waiting_threads(&data, watcher);
-	// pthread_mutex_lock(&data.print_lock);
-	if (data.has_meals_counter == true)
+	table = init_table(argc, argv);
+	adding_cutlery(&table);
+	init_philo(&table);
+	supervisor(&table, &watcher);
+	creating_philo_thread(&table);
+	waiting_threads(&table, watcher);
+	if (table.has_meals_counter == true)
 	{
-		printf("nb of philos: %d and full belly %d\n\n", data.nb_philos, data.full_belly);
-		if (data.full_belly >= data.nb_philos)
-			print_message(data.table, FULL);
+		printf("nb of philos: %d and full belly %d\n\n", table.nb_philos, table.full_belly);
+		if (table.full_belly >= table.nb_philos)
+			print_message(table.philo, FULL);
 	}
-	// pthread_mutex_unlock(&data.print_lock);
 	return (0);
 }
 

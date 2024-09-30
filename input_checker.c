@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/28 10:34:01 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/09/25 17:03:36 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/09/30 15:11:19 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,7 @@ static bool	number_validation(char **argv)
 	while (argv[i])
 	{
 		if (ft_atol(argv[i]) < 1 || ft_atol(argv[i]) > INT_MAX)
-			// || ft_atol(argv[i]) < 60)
 		{
-			// if (ft_atol(argv[i]) < 60)
-			// 	printf(RED"\t\tTime must be bigger than 60!\n"RESET);
 			return (false);
 		}
 		i++;
