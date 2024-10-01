@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/24 13:00:19 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/10/01 18:17:00 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/10/01 19:12:10 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,15 @@ int long	get_current_time(void)
 
 void	resting(int long must_wait, t_philo *philo)
 {
-	int long	current_time;
+	// int long	current_time;
+	int long	wakeup;
 
-	current_time = get_current_time();
-	while ((get_current_time() - current_time) < must_wait)
+	wakeup = get_current_time() + must_wait;
+	// current_time = get_current_time();
+	// while ((get_current_time() - current_time) < must_wait)
+	while (wakeup > get_current_time())
 	{
-		usleep(200);
+		usleep(100);
 		pthread_mutex_lock(&philo->table->dead_lock);
 		if (philo->table->is_alive == false)
 		{
