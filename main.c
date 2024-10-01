@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/17 17:00:28 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/09/30 15:12:13 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/10/01 16:59:54 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,28 +43,22 @@ void	adding_cutlery(t_table *table)
 
 int	main(int argc, char **argv)
 {
-	t_table		table;
-	pthread_t	watcher;
+	t_table	table;
+	int		i;
 
 	if (input_checker(argc, argv) == false)
 	{
 		printf(YEL"Correct Input\n"RESET);
 		printf("\t 🔢 PHILOS ⌛ DIE ⌛ EAT ⌛ SLEEP (🥢 TIMES MUST EAT)\n");
 		printf("\n\t./philo 5 410 100 100\t OR \t./philo 5 410 100 100 10\n\n");
-		return (false);
+		return (1);
 	}
 	table = init_table(argc, argv);
 	adding_cutlery(&table);
 	init_philo(&table);
-	supervisor(&table, &watcher);
-	creating_philo_thread(&table);
-	waiting_threads(&table, watcher);
-	if (table.has_meals_counter == true)
-	{
-		printf("nb of philos: %d and full belly %d\n\n", table.nb_philos, table.full_belly);
-		if (table.full_belly >= table.nb_philos)
-			print_message(table.philo, FULL);
-	}
+	i = creating_philo_thread(&table);
+	observe(&table);
+	waiting_threads(&table, i);
 	return (0);
 }
 

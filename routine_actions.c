@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/24 12:55:45 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/09/30 16:04:43 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/10/01 16:36:18 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,11 @@ bool	is_single_philo(t_philo *philo)
 {
 	if (philo->table->nb_philos == 1)
 	{
+		pthread_mutex_lock(&philo->table->meal_lock);
+		philo->last_meal = get_current_time();
+		pthread_mutex_unlock(&philo->table->meal_lock);
 		pthread_mutex_unlock(philo->r_hashi);
-		resting(philo->table->limit_time_to_die);
+		resting(philo->table->limit_time_to_die, philo);
 		pthread_mutex_destroy(philo->r_hashi);
 		return (true);
 	}
@@ -28,15 +31,13 @@ void	pickup_second_hashi(t_philo *philo, pthread_mutex_t *second_hashi)
 {
 	if (pthread_mutex_lock(second_hashi) == 0)
 	{
-		if (philo->table->is_alive == true)
-			print_message(philo, HASHI);
-		if (philo->table->is_alive == true)
-			print_message(philo, EAT);
+		print_message(philo, HASHI);
+		print_message(philo, EAT);
 		pthread_mutex_lock(&philo->table->meal_lock);
 		philo->last_meal = get_current_time();
 		philo->nb_meals += 1;
 		pthread_mutex_unlock(&philo->table->meal_lock);
-		resting(philo->table->limit_time_to_eat);
+		resting(philo->table->limit_time_to_eat, philo);
 		pthread_mutex_unlock(second_hashi);
 	}
 	else
@@ -57,12 +58,9 @@ static bool eating(t_philo *philo)
 	}
 	if (pthread_mutex_lock(first_hashi) == 0)
 	{
-		if (philo->table->is_alive == true)
-			print_message(philo, HASHI);
-		if(is_single_philo(philo) == true)
+		print_message(philo, HASHI);
+		if (is_single_philo(philo) == true)
 			return (false);
-		// if (philo->table->is_alive == false)
-		// 	return (false);
 		pickup_second_hashi(philo, second_hashi);
 		pthread_mutex_unlock(first_hashi);
 	}
@@ -76,9 +74,8 @@ static bool eating(t_philo *philo)
 
 static void	sleeping(t_philo *philo)
 {
-	if (philo->table->is_alive == true)
-		print_message(philo, SLEEPY);
-	resting(philo->table->limit_time_to_sleep);
+	print_message(philo, SLEEPY);
+	resting(philo->table->limit_time_to_sleep, philo);
 }
 
 void	*routine(void *arg)
@@ -89,28 +86,20 @@ void	*routine(void *arg)
 	pthread_mutex_lock(&philo->table->start_lock);
 	pthread_mutex_unlock(&philo->table->start_lock);
 	if ((philo->philo_id % 2) == 0)
-		resting(philo->table->limit_time_to_eat / 2);
+		resting(philo->table->limit_time_to_eat / 2, philo);
 	while (1)
 	{
-		// pthread_mutex_lock(&philo->table->alive_lock);
-		// if (philo->table->is_alive == false)
-		// {
-		// 	pthread_mutex_unlock(&philo->table->alive_lock);
-		// 	return (NULL);
-		// }
-		// pthread_mutex_unlock(&philo->table->alive_lock);
 		if (eating(philo) == false)
 			return (NULL);
-		sleeping(philo);
-		if (had_enough_meals(philo->table) == true)
-			return (NULL);
-		if (is_someone_dead(philo->table) == true)
+		pthread_mutex_lock(&philo->table->dead_lock);
+		if (philo->table->is_alive == false || philo->nb_meals == philo->table->how_many_meals)
 		{
-			printf("to morrendo por dentro\n");
+			pthread_mutex_unlock(&philo->table->dead_lock);
 			return (NULL);
 		}
-		if (philo->table->is_alive == true)
-			print_message(philo, THINK);
+		pthread_mutex_unlock(&philo->table->dead_lock);
+		sleeping(philo);
+		print_message(philo, THINK);
 	}
 	return (NULL);
 }

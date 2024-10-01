@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/17 17:00:24 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/09/30 15:56:05 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/10/01 17:01:56 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@
 # define EAT 1
 # define SLEEPY 2
 # define THINK 3
-# define DIED 4
-# define HASHI_R 5
 # define HASHI 6
 # define FULL 7
 
@@ -77,14 +75,12 @@ t_table		init_table(int argc, char **argv);
 void		init_philo(t_table *table);
 
 //Threads
-void		creating_philo_thread(t_table *table);
-void		waiting_threads(t_table *table, pthread_t watcher);
-void		supervisor(t_table *table, pthread_t *watcher);
+int			creating_philo_thread(t_table *table);
+void		waiting_threads(t_table *table, int index);
 
-void		resting(int long must_wait);
+void		resting(int long must_wait, t_philo *philo);
 void		*routine(void *arg);
 bool		had_enough_meals(t_table *table);
-bool		is_starved(t_philo *philo);
 bool		is_someone_dead(t_table *table);
 
 // Utils
@@ -92,5 +88,6 @@ long		ft_atol(const char *str);
 int long	get_current_time(void);
 int long	time_stamp(t_table *table);
 void		print_message(t_philo *philo, int flag);
+void		*observe(t_table *table);
 
 #endif
