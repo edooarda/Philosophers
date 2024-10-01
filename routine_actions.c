@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/24 12:55:45 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/10/01 17:25:27 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/10/01 19:24:33 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,11 @@ static bool	eating(t_philo *philo)
 
 	first_hashi = philo->l_hashi;
 	second_hashi = philo->r_hashi;
-	if (philo->r_hashi < philo->l_hashi)
-	{
-		first_hashi = philo->r_hashi;
-		second_hashi = philo->l_hashi;
-	}
+	// if (philo->r_hashi < philo->l_hashi)
+	// {
+	// 	first_hashi = philo->r_hashi;
+	// 	second_hashi = philo->l_hashi;
+	// }
 	if (pthread_mutex_lock(first_hashi) == 0)
 	{
 		print_message(philo, HASHI);
