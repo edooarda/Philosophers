@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/17 17:00:28 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/10/01 16:59:54 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/10/01 18:02:01 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,10 @@ void	adding_cutlery(t_table *table)
 			while (i >= 0)
 			{
 				pthread_mutex_destroy(&table->cutlery[i]);
-				free(&table->cutlery[i]);
 				write(2, "ERROR creating mutex, detroing previous\n", 41);
 				i--;
 			}
-			// free memory for forks outside the loop?
+			free(table->cutlery);
 			break ;
 		}
 		i++;
@@ -59,8 +58,6 @@ int	main(int argc, char **argv)
 	i = creating_philo_thread(&table);
 	observe(&table);
 	waiting_threads(&table, i);
+	cleaner(&table);
 	return (0);
 }
-
-// TODO free memory from mutex array and from philo array
-// destroy print mutex, meals_counter_mutex and array the mutexes

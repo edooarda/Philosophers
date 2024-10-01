@@ -6,13 +6,13 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/24 12:55:45 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/10/01 16:36:18 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/10/01 17:25:27 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-bool	is_single_philo(t_philo *philo)
+static bool	is_single_philo(t_philo *philo)
 {
 	if (philo->table->nb_philos == 1)
 	{
@@ -20,14 +20,14 @@ bool	is_single_philo(t_philo *philo)
 		philo->last_meal = get_current_time();
 		pthread_mutex_unlock(&philo->table->meal_lock);
 		pthread_mutex_unlock(philo->r_hashi);
-		resting(philo->table->limit_time_to_die, philo);
+		resting(philo->table->time_to_die, philo);
 		pthread_mutex_destroy(philo->r_hashi);
 		return (true);
 	}
 	return (false);
 }
 
-void	pickup_second_hashi(t_philo *philo, pthread_mutex_t *second_hashi)
+static void	pickup_second_hashi(t_philo *philo, pthread_mutex_t *second_hashi)
 {
 	if (pthread_mutex_lock(second_hashi) == 0)
 	{
@@ -37,17 +37,17 @@ void	pickup_second_hashi(t_philo *philo, pthread_mutex_t *second_hashi)
 		philo->last_meal = get_current_time();
 		philo->nb_meals += 1;
 		pthread_mutex_unlock(&philo->table->meal_lock);
-		resting(philo->table->limit_time_to_eat, philo);
+		resting(philo->table->time_to_eat, philo);
 		pthread_mutex_unlock(second_hashi);
 	}
 	else
-		write(2, "Error locking Hashi\n",22);
+		write(2, "Error locking Hashi\n", 22);
 }
 
-static bool eating(t_philo *philo)
+static bool	eating(t_philo *philo)
 {
-	pthread_mutex_t *first_hashi;
-	pthread_mutex_t *second_hashi;
+	pthread_mutex_t	*first_hashi;
+	pthread_mutex_t	*second_hashi;
 
 	first_hashi = philo->l_hashi;
 	second_hashi = philo->r_hashi;
@@ -66,7 +66,7 @@ static bool eating(t_philo *philo)
 	}
 	else
 	{
-		write(2, "Error locking Hashi\n",22);
+		write(2, "Error locking Hashi\n", 22);
 		return (false);
 	}
 	return (true);
@@ -75,7 +75,7 @@ static bool eating(t_philo *philo)
 static void	sleeping(t_philo *philo)
 {
 	print_message(philo, SLEEPY);
-	resting(philo->table->limit_time_to_sleep, philo);
+	resting(philo->table->time_to_sleep, philo);
 }
 
 void	*routine(void *arg)
@@ -86,13 +86,14 @@ void	*routine(void *arg)
 	pthread_mutex_lock(&philo->table->start_lock);
 	pthread_mutex_unlock(&philo->table->start_lock);
 	if ((philo->philo_id % 2) == 0)
-		resting(philo->table->limit_time_to_eat / 2, philo);
+		resting(philo->table->time_to_eat / 2, philo);
 	while (1)
 	{
 		if (eating(philo) == false)
 			return (NULL);
 		pthread_mutex_lock(&philo->table->dead_lock);
-		if (philo->table->is_alive == false || philo->nb_meals == philo->table->how_many_meals)
+		if (philo->table->is_alive == false
+			|| philo->nb_meals == philo->table->how_many_meals)
 		{
 			pthread_mutex_unlock(&philo->table->dead_lock);
 			return (NULL);

@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/27 17:45:49 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/10/01 16:58:10 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/10/01 17:44:44 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,8 @@ int	creating_philo_thread(t_table *table)
 		if (pthread_create(&table->philo[i].table_id, NULL,
 				&routine, &table->philo[i]) != 0)
 		{
-			// free memory cutlery and philo
 			pthread_mutex_unlock(&table->start_lock);
-			write(2, "ERROR creating Philo thread\n", 22);
+			write(2, "ERROR creating Philo thread\n", 29);
 			return (i);
 		}
 		i++;
@@ -44,7 +43,6 @@ void	waiting_threads(t_table *table, int index)
 	{
 		if (pthread_join(table->philo[i].table_id, NULL) != 0)
 		{
-			// free memory cutlery and philo_table
 			write(2, "ERROR join Philo thread\n", 22);
 			return ;
 		}
