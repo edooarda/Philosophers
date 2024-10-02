@@ -6,7 +6,7 @@
 #    By: edribeir <edribeir@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2024/05/17 17:02:14 by edribeir      #+#    #+#                  #
-#    Updated: 2024/10/02 18:13:47 by edribeir      ########   odam.nl          #
+#    Updated: 2024/10/02 18:26:12 by edribeir      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,7 @@ NAME = philo
 
 CFLAGS = -Wall -Werror -Wextra -g
 # CFLAGS += -fsanitize=thread
+# CFLAGS += -fsanitize=address
 
 F_THREAD = -pthread
 
