@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/02 14:15:10 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/10/02 14:19:50 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/10/02 14:23:03 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ void	*routine(void *arg)
 				return (NULL);
 		}
 		pthread_mutex_lock(&philo->table->dead_lock);
-		simulation_stopper(philo);
+		if (simulation_stopper(philo) == true)
+			return (NULL);
 		sleeping_and_thinking(philo);
 	}
 	return (NULL);
