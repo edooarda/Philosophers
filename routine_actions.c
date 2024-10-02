@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/24 12:55:45 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/10/02 10:59:10 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/10/02 12:14:09 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,22 +44,6 @@ static void	pickup_second_hashi(t_philo *philo, pthread_mutex_t *second_hashi)
 		write(2, "Error locking Hashi\n", 22);
 }
 
-static bool	eating_even(t_philo *philo)
-{
-	if (pthread_mutex_lock(philo->r_hashi) == 0)
-	{
-		print_message(philo, HASHI);
-		pickup_second_hashi(philo, philo->l_hashi);
-		pthread_mutex_unlock(philo->r_hashi);
-	}
-	else
-	{
-		write(2, "Error locking Hashi\n", 22);
-		return (false);
-	}
-	return (true);
-}
-
 static bool	eating(t_philo *philo)
 {
 	if (pthread_mutex_lock(philo->l_hashi) == 0)
@@ -78,10 +62,11 @@ static bool	eating(t_philo *philo)
 	return (true);
 }
 
-static void	sleeping(t_philo *philo)
+static void	sleeping_and_thinking(t_philo *philo)
 {
 	print_message(philo, SLEEPY);
 	resting(philo->table->time_to_sleep, philo);
+	print_message(philo, THINK);
 }
 
 void	*routine(void *arg)
@@ -92,19 +77,14 @@ void	*routine(void *arg)
 	pthread_mutex_lock(&philo->table->start_lock);
 	pthread_mutex_unlock(&philo->table->start_lock);
 	if ((philo->philo_id % 2) == 0)
+	{
+		print_message(philo, THINK);
 		resting(philo->table->time_to_eat / 2, philo);
+	}
 	while (1)
 	{
-		if ((philo->philo_id % 2) == 0)
-		{
-			if (eating_even(philo) == false)
-				return (NULL);
-		}
-		else
-		{
-			if (eating(philo) == false)
-				return (NULL);
-		}
+		if (eating(philo) == false)
+			return (NULL);
 		pthread_mutex_lock(&philo->table->dead_lock);
 		if (philo->table->is_alive == false
 			|| philo->nb_meals == philo->table->how_many_meals)
@@ -113,8 +93,7 @@ void	*routine(void *arg)
 			return (NULL);
 		}
 		pthread_mutex_unlock(&philo->table->dead_lock);
-		sleeping(philo);
-		print_message(philo, THINK);
+		sleeping_and_thinking(philo);
 	}
 	return (NULL);
 }

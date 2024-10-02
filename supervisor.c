@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/25 16:47:19 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/10/02 11:06:59 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/10/02 12:31:57 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static bool	is_someone_dead(t_table *tb)
 			&& get_current_time() - tb->philo[i].last_meal > tb->time_to_die)
 		{
 			tb->is_alive = false;
-			printf(RED"%ld %d has died\n"RESET,
+			printf(RED"%ld %d died\n"RESET,
 				get_current_time() - tb->start_time, tb->philo[i].philo_id);
 			pthread_mutex_unlock(&tb->meal_lock);
 			pthread_mutex_unlock(&tb->dead_lock);
@@ -68,6 +68,7 @@ void	*supervisor(t_table *table)
 		{
 			return (NULL);
 		}
+		usleep(50);
 	}
 	return (NULL);
 }

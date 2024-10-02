@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/10/01 16:52:13 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/10/01 18:03:16 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/10/02 11:11:02 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 void	mutexes_destroier(t_table *table)
 {
 	int	i;
-	
+
 	i = 0;
 	if (table->cutlery != NULL)
 	{
-		while(i < table->nb_philos)
+		while (i < table->nb_philos)
 		{
 			pthread_mutex_destroy(&table->cutlery[i]);
 			i++;
