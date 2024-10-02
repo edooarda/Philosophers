@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/24 12:55:45 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/10/02 15:21:15 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/10/02 18:06:36 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,12 @@ static bool	is_single_philo(t_philo *philo)
 		pthread_mutex_unlock(&philo->table->meal_lock);
 		pthread_mutex_unlock(philo->r_hashi);
 		resting(philo->table->time_to_die, philo);
-		pthread_mutex_destroy(philo->r_hashi);
 		return (true);
 	}
 	return (false);
 }
 
-static void	pickup_second_hashi(t_philo *philo, pthread_mutex_t *second_hashi)
+static bool	pickup_second_hashi(t_philo *philo, pthread_mutex_t *second_hashi)
 {
 	if (pthread_mutex_lock(second_hashi) == 0)
 	{
@@ -39,61 +38,77 @@ static void	pickup_second_hashi(t_philo *philo, pthread_mutex_t *second_hashi)
 		pthread_mutex_unlock(&philo->table->meal_lock);
 		resting(philo->table->time_to_eat, philo);
 		pthread_mutex_unlock(second_hashi);
+		return (true);
 	}
 	else
-		write(2, "Error locking Hashi\n", 22);
+	{
+		write(2, "Error locking Hashi\n", 21);
+		return (false);
+	}
 }
 
-static bool	eating(t_philo *philo)
+static bool	pickup_first_hashi(t_philo *philo,
+	pthread_mutex_t *frst_hashi, pthread_mutex_t *scnd_hashi)
 {
-	if (pthread_mutex_lock(philo->l_hashi) == 0)
+	if (pthread_mutex_lock(frst_hashi) == 0)
 	{
 		print_message(philo, HASHI);
 		if (is_single_philo(philo) == true)
 			return (false);
-		pickup_second_hashi(philo, philo->r_hashi);
-		pthread_mutex_unlock(philo->l_hashi);
+		pickup_second_hashi(philo, scnd_hashi);
+		pthread_mutex_unlock(frst_hashi);
+		return (true);
 	}
 	else
 	{
 		write(2, "Error locking Hashi\n", 22);
 		return (false);
 	}
+}
+
+bool	eating(t_philo *philo)
+{
+	pthread_mutex_t	*frst_hashi;
+	pthread_mutex_t	*scnd_hashi;
+
+	if (philo->philo_id % 2 == 0)
+	{
+		frst_hashi = philo->l_hashi;
+		scnd_hashi = philo->r_hashi;
+	}
+	else
+	{
+		frst_hashi = philo->r_hashi;
+		scnd_hashi = philo->l_hashi;
+	}
+	// if (pthread_mutex_lock(frst_hashi) == 0)
+	// {
+	// 	print_message(philo, HASHI);
+	// 	if (is_single_philo(philo) == true)
+	// 		return (false);
+	// 	pickup_second_hashi(philo, scnd_hashi);
+	// 	pthread_mutex_unlock(frst_hashi);
+	// }
+	// else
+	// {
+	// 	write(2, "Error locking Hashi\n", 22);
+	// 	return (false);
+	// }
+	if (pickup_first_hashi(philo, frst_hashi, scnd_hashi) == false)
+		return (false);
 	return (true);
 }
 
-static void	sleeping_and_thinking(t_philo *philo)
+void	sleeping_and_thinking(t_philo *philo)
 {
+	int long	time_to_think;
+
+	time_to_think = 2 * philo->table->time_to_eat - philo->table->time_to_sleep;
+	if (time_to_think < 0)
+		time_to_think = 0; 
 	print_message(philo, SLEEPY);
 	resting(philo->table->time_to_sleep, philo);
 	print_message(philo, THINK);
-}
-
-void	*routine(void *arg)
-{
-	t_philo	*philo;
-
-	philo = (t_philo *)arg;
-	pthread_mutex_lock(&philo->table->start_lock);
-	pthread_mutex_unlock(&philo->table->start_lock);
-	if ((philo->philo_id % 2) == 0)
-	{
-		print_message(philo, THINK);
-		resting(philo->table->time_to_eat / 2, philo);
-	}
-	while (1)
-	{
-		if (eating(philo) == false)
-			return (NULL);
-		pthread_mutex_lock(&philo->table->dead_lock);
-		if (philo->table->is_alive == false
-			|| philo->nb_meals == philo->table->how_many_meals)
-		{
-			pthread_mutex_unlock(&philo->table->dead_lock);
-			return (NULL);
-		}
-		pthread_mutex_unlock(&philo->table->dead_lock);
-		sleeping_and_thinking(philo);
-	}
-	return (NULL);
+	if (philo->table->nb_philos % 2 != 0)
+		resting(time_to_think, philo);
 }

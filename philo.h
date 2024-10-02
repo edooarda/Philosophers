@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/17 17:00:24 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/10/02 15:21:42 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/10/02 18:08:36 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ void		waiting_threads(t_table *table, int index);
 
 //Routine
 void		*routine(void *arg);
+bool		eating(t_philo *philo);
+void		sleeping_and_thinking(t_philo *philo);
 
 //time
 void		resting(int long must_wait, t_philo *philo);
