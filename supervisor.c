@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/25 16:47:19 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/10/01 17:39:25 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/10/02 11:06:59 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static bool	is_someone_dead(t_table *tb)
 	return (false);
 }
 
-void	*observe(t_table *table)
+void	*supervisor(t_table *table)
 {
 	while (1)
 	{

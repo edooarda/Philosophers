@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/17 17:00:28 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/10/01 19:13:24 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/10/02 11:07:08 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	main(int argc, char **argv)
 	adding_cutlery(&table);
 	init_philo(&table);
 	i = creating_philo_thread(&table);
-	observe(&table);
+	supervisor(&table);
 	waiting_threads(&table, i);
 	cleaner(&table);
 	return (0);

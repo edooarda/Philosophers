@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/17 17:00:24 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/10/01 18:00:59 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/10/02 11:07:45 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ typedef struct s_philosopher
 
 // Checker
 bool		input_checker(int argc, char **argv);
+void		*supervisor(t_table *table);
 
 // Init
 t_table		init_table(int argc, char **argv);
@@ -73,14 +74,16 @@ void		init_philo(t_table *table);
 //Threads
 int			creating_philo_thread(t_table *table);
 void		waiting_threads(t_table *table, int index);
-
-void		resting(int long must_wait, t_philo *philo);
 void		*routine(void *arg);
-long		ft_atol(const char *str);
+
+//time
+void		resting(int long must_wait, t_philo *philo);
 int long	get_current_time(void);
 int long	time_stamp(t_table *table);
+
+// Utils
+long		ft_atol(const char *str);
 void		print_message(t_philo *philo, int flag);
-void		*observe(t_table *table);
 void		cleaner(t_table *table);
 
 #endif
