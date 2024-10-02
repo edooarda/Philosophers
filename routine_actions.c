@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/24 12:55:45 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/10/02 18:06:36 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/10/02 18:14:54 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,19 +81,6 @@ bool	eating(t_philo *philo)
 		frst_hashi = philo->r_hashi;
 		scnd_hashi = philo->l_hashi;
 	}
-	// if (pthread_mutex_lock(frst_hashi) == 0)
-	// {
-	// 	print_message(philo, HASHI);
-	// 	if (is_single_philo(philo) == true)
-	// 		return (false);
-	// 	pickup_second_hashi(philo, scnd_hashi);
-	// 	pthread_mutex_unlock(frst_hashi);
-	// }
-	// else
-	// {
-	// 	write(2, "Error locking Hashi\n", 22);
-	// 	return (false);
-	// }
 	if (pickup_first_hashi(philo, frst_hashi, scnd_hashi) == false)
 		return (false);
 	return (true);
@@ -105,7 +92,7 @@ void	sleeping_and_thinking(t_philo *philo)
 
 	time_to_think = 2 * philo->table->time_to_eat - philo->table->time_to_sleep;
 	if (time_to_think < 0)
-		time_to_think = 0; 
+		time_to_think = 0;
 	print_message(philo, SLEEPY);
 	resting(philo->table->time_to_sleep, philo);
 	print_message(philo, THINK);
