@@ -6,7 +6,7 @@
 #    By: edribeir <edribeir@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2024/05/17 17:02:14 by edribeir      #+#    #+#                  #
-#    Updated: 2024/10/02 14:15:03 by edribeir      ########   odam.nl          #
+#    Updated: 2024/10/02 15:29:18 by edribeir      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,6 @@ SOURCE = main.c \
 		init_data_table.c \
 		init_philo.c \
 		threads.c \
-		routine.c \
 		routine_actions.c \
 		supervisor.c \
 		utils.c \

@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/17 17:00:24 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/10/02 14:18:37 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/10/02 15:21:42 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,6 @@ void		waiting_threads(t_table *table, int index);
 
 //Routine
 void		*routine(void *arg);
-bool		eating_odd(t_philo *philo);
-bool		is_single_philo(t_philo *philo);
-bool		eating_even(t_philo *philo);
-void		pickup_second_hashi(t_philo *philo, pthread_mutex_t *second_hashi);
-void		sleeping_and_thinking(t_philo *philo);
 
 //time
 void		resting(int long must_wait, t_philo *philo);
