@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/24 12:55:45 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/10/01 19:24:33 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/10/02 10:59:10 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,25 +44,31 @@ static void	pickup_second_hashi(t_philo *philo, pthread_mutex_t *second_hashi)
 		write(2, "Error locking Hashi\n", 22);
 }
 
+static bool	eating_even(t_philo *philo)
+{
+	if (pthread_mutex_lock(philo->r_hashi) == 0)
+	{
+		print_message(philo, HASHI);
+		pickup_second_hashi(philo, philo->l_hashi);
+		pthread_mutex_unlock(philo->r_hashi);
+	}
+	else
+	{
+		write(2, "Error locking Hashi\n", 22);
+		return (false);
+	}
+	return (true);
+}
+
 static bool	eating(t_philo *philo)
 {
-	pthread_mutex_t	*first_hashi;
-	pthread_mutex_t	*second_hashi;
-
-	first_hashi = philo->l_hashi;
-	second_hashi = philo->r_hashi;
-	// if (philo->r_hashi < philo->l_hashi)
-	// {
-	// 	first_hashi = philo->r_hashi;
-	// 	second_hashi = philo->l_hashi;
-	// }
-	if (pthread_mutex_lock(first_hashi) == 0)
+	if (pthread_mutex_lock(philo->l_hashi) == 0)
 	{
 		print_message(philo, HASHI);
 		if (is_single_philo(philo) == true)
 			return (false);
-		pickup_second_hashi(philo, second_hashi);
-		pthread_mutex_unlock(first_hashi);
+		pickup_second_hashi(philo, philo->r_hashi);
+		pthread_mutex_unlock(philo->l_hashi);
 	}
 	else
 	{
@@ -89,8 +95,16 @@ void	*routine(void *arg)
 		resting(philo->table->time_to_eat / 2, philo);
 	while (1)
 	{
-		if (eating(philo) == false)
-			return (NULL);
+		if ((philo->philo_id % 2) == 0)
+		{
+			if (eating_even(philo) == false)
+				return (NULL);
+		}
+		else
+		{
+			if (eating(philo) == false)
+				return (NULL);
+		}
 		pthread_mutex_lock(&philo->table->dead_lock);
 		if (philo->table->is_alive == false
 			|| philo->nb_meals == philo->table->how_many_meals)
