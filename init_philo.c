@@ -6,13 +6,13 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/25 16:12:09 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/10/02 18:23:14 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/10/03 10:43:31 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	init_philo(t_table *table)
+bool	init_philo(t_table *table)
 {
 	int	i;
 
@@ -21,7 +21,7 @@ void	init_philo(t_table *table)
 	if (table->philo == NULL)
 	{
 		printf("Fail allocation memory\n");
-		return ;
+		return (false);
 	}
 	while (i < table->nb_philos)
 	{
@@ -36,4 +36,5 @@ void	init_philo(t_table *table)
 		table->philo[i].table = table;
 		i++;
 	}
+	return (true);
 }

@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/17 17:00:24 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/10/02 18:08:36 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/10/03 12:08:35 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void		*supervisor(t_table *table);
 
 // Init
 t_table		init_table(int argc, char **argv);
-void		init_philo(t_table *table);
+bool		init_philo(t_table *table);
 
 //Threads
 int			creating_philo_thread(t_table *table);

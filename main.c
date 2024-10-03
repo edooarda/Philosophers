@@ -6,13 +6,13 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/05/17 17:00:28 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/10/02 11:07:08 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/10/03 11:39:11 by edribeir      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	adding_cutlery(t_table *table)
+bool	adding_cutlery(t_table *table)
 {
 	int	i;
 
@@ -21,7 +21,7 @@ void	adding_cutlery(t_table *table)
 	if (table->cutlery == NULL)
 	{
 		write(2, "Error allocation memory for Cutlery\n", 37);
-		return ;
+		return (false);
 	}
 	while (i < table->nb_philos)
 	{
@@ -34,10 +34,11 @@ void	adding_cutlery(t_table *table)
 				i--;
 			}
 			free(table->cutlery);
-			break ;
+			return (false);
 		}
 		i++;
 	}
+	return (true);
 }
 
 int	main(int argc, char **argv)
@@ -53,8 +54,13 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	table = init_table(argc, argv);
-	adding_cutlery(&table);
-	init_philo(&table);
+	if (adding_cutlery(&table) == false)
+		return (1);
+	if (init_philo(&table) == false)
+	{
+		free(table.cutlery);
+		return (1);
+	}
 	i = creating_philo_thread(&table);
 	supervisor(&table);
 	waiting_threads(&table, i);
