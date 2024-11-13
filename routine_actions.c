@@ -6,7 +6,7 @@
 /*   By: edribeir <edribeir@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/24 12:55:45 by edribeir      #+#    #+#                 */
-/*   Updated: 2024/10/02 18:14:54 by edribeir      ########   odam.nl         */
+/*   Updated: 2024/11/13 22:28:26 by edooarda      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static bool	pickup_first_hashi(t_philo *philo,
 	}
 	else
 	{
-		write(2, "Error locking Hashi\n", 22);
+		write(2, "Error locking Hashi\n", 20);
 		return (false);
 	}
 }
